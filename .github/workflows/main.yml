@@ -1,0 +1,10 @@
+name: Validador-Elite-01
+on:
+  workflow_dispatch:
+jobs:
+  executar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executando Ordem no Nucleo
+        run: |
+          curl https://eth-mainnet.g.alchemy.com/v2/_6RXGgH59fRTFT1gE--mf -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"alchemy_getAssetTransfers","params":[{"fromBlock": "0x0","category": ["external","erc20","erc721"],"fromAddress": "0x994b342dd87fc825f66e51ffa3ef71ad818b6893"}],"id":0}'
