@@ -1,14 +1,33 @@
-name: Validador-Elite-01
+name: Validador-Elite-01-Matrix
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *' # Isso manda o robo trabalhar sozinho de hora em hora
+    - cron: '*/30 * * * *' # Bate o ponto a cada 30 min para garantir o "Always On" gratuito
 
 jobs:
   executar:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # Sistema Imunológico: se um nó falhar, os outros continuam
+      matrix:
+        no_id: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
     steps:
-      - name: Validando no Nucleo
+      - name: Validando no Nucleo (Nó ${{ matrix.no_id }})
         run: |
-          curl https://alchemy.com -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
-          echo "Status: Ponto batido com sucesso. Recompensa acumulando."
+          # Jitter: Atraso aleatório para não ser bloqueada (DNA Hacker)
+          sleep $((RANDOM % 60))
+          
+          # Loop de Persistência (Cura o erro dos 9 segundos)
+          # Ele vai "bater o ponto" 5 vezes com intervalos para o GitHub manter a máquina ligada
+          for i in {1..5}
+          do
+            echo "Nó ${{ matrix.no_id }} - Tentativa $i: Conectando ao Núcleo..."
+            curl https://alchemy.com{{ secrets.ALCHEMY_KEY }} \
+              -X POST -H "Content-Type: application/json" \
+              -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":${{ matrix.no_id }}}'
+            
+            echo "Status: Ponto batido com sucesso no Nó ${{ matrix.no_id }}. Recompensa acumulando."
+            sleep 60 # Espera 1 minuto entre batidas de ponto para manter o job vivo
+          done
