@@ -1,0 +1,15 @@
+name: Fabrica_de_Lucro
+on:
+  schedule:
+    - cron: '0 * * * *' # Bate o ponto sozinho a cada 1 hora
+  workflow_dispatch: # Permite que você ligue na mão agora
+
+jobs:
+  trabalhar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Executar Minerador
+        env:
+          STREAMR_PRIVATE_KEY: ${{ secrets.STREAMR_PRIVATE_KEY }}
+        run: python bot_vitoria.py
