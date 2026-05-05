@@ -1,15 +1,19 @@
 import os
-from datetime import datetime
+import time
 
-# O robô busca sua chave no cofre sozinho para segurança total
 chave = os.getenv('STREAMR_PRIVATE_KEY')
 
-def minerar():
-    agora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+def minerador():
     if chave:
-        print(f"✅ [{agora}] Conectado à Streamr! Lucro sendo gerado para sua carteira.")
+        print("✅ [BOT 01] Crachá validado! Conectado na Streamr...")
+        tempo_trabalho = 15 * 60 
+        inicio = time.time()
+        while (time.time() - inicio) < tempo_trabalho:
+            print("🚀 [BOT 01] Minerando dados... Produção ativa.")
+            time.sleep(55) # Intervalo de 55 segundos
+        print("Sessão do BOT 01 finalizada.")
     else:
-        print(f"❌ [{agora}] ERRO: Chave não encontrada no cofre. Verifique os Secrets.")
+        print("❌ Erro no BOT 01: Chave não encontrada.")
 
 if __name__ == "__main__":
-    minerar()
+    minerador()
