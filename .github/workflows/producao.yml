@@ -1,8 +1,9 @@
-name: Fabrica_de_Lucro
+name: Fábrica_de_Lucro_01
+
 on:
   schedule:
-    - cron: '0 * * * *' # Bate o ponto sozinho a cada 1 hora
-  workflow_dispatch: # Permite que você ligue na mão agora
+    - cron: '0 * * * *'    # Bate o ponto sozinho a cada 1 hora (no minuto 0)
+  workflow_dispatch:      # Deixa que você ligue na mão agora se quiser
 
 jobs:
   trabalhar:
