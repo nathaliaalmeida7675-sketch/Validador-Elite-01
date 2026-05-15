@@ -21,4 +21,4 @@ while True:
     
     print("⏳ Aguardando abertura do próximo bloco de tarefas...", flush=True)
     sys.stdout.flush()
-    time.sleep(15)
+    time.sleep(60)
