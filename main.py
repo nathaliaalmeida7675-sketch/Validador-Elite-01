@@ -2,7 +2,7 @@ import requests
 import time
 import sys
 
-URL_API = "https://coingecko.com"
+URL_API = https://coingecko.com
 
 print("🤖 SERVIDOR DE SUSTENTAÇÃO DE PIPELINES INICIALIZADO...", flush=True)
 print("⚡ CONEXÃO SEGURA ESTABELECIDA. MONITORAMENTO 24H ONLINE.", flush=True)
