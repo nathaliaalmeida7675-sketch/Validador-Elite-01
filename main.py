@@ -4,12 +4,8 @@ import sys
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-# Endpoint oficial da API pública da Binance para pegar o preço do Tether limpo
+# Endpoint oficial da API da Binance (Entrega o JSON correto)
 URL_API = "https://binance.com"
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-}
 
 def iniciar_monitoramento():
     print("🤖 SERVIDOR DE SUSTENTAÇÃO DE PIPELINES INICIALIZADO...", flush=True)
@@ -17,18 +13,17 @@ def iniciar_monitoramento():
 
     while True:
         try:
-            resposta = requests.get(URL_API, headers=HEADERS, timeout=10)
+            resposta = requests.get(URL_API, timeout=10)
             resposta.raise_for_status()
             
             dados = resposta.json()
-            # Tratamento correto baseado no formato de retorno real da API da Binance
             preco_estavel = float(dados['price'])
             
-            print(f"✓ [SUCCESS LOG] Paridade validada na Binance: ${preco_estavel}", flush=True)
+            print(f"✓ [SUCCESS LOG] Paridade validada na Binance: R$ {preco_estavel:.2f}", flush=True)
             print("⚡ Pipeline de dados limpo. Taxa de execução processada!", flush=True)
             
         except Exception as falha_sistema:
-            print(f"❌ [ALERT] Falha temporária de conexão ou resposta: {falha_sistema}", flush=True)
+            print(f"❌ [ALERT] Falha temporária de conexão: {falha_sistema}", flush=True)
         
         print("⏳ Aguardando abertura do próximo bloco de tarefas...", flush=True)
         sys.stdout.flush()
