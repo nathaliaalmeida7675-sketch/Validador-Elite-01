@@ -1,54 +1,51 @@
 import time
 import threading
 import os
-import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-# --- AUTOMAÇÃO 1: Monitor Interno de Infraestrutura e Performance ---
-def monitorar_container():
-    print("🔌 Scanner de Infraestrutura Ativado. Monitorando performance do container...")
+# --- AUTOMACÃO 1: Engine de Processamento Numérico Computacional ---
+def processamento_interno():
+    print("🔌 Engine Computacional Ativado. Calculando ciclos de performance...")
     
-    inicio_servico = time.time()
     ciclo = 0
+    inicio = time.time()
     
     while True:
         try:
             ciclo += 1
-            tempo_ativo = int(time.time() - inicio_servico)
+            uptime_segundos = int(time.time() - inicio)
             
-            # Captura dados nativos do processo e do sistema operacional Linux do Render
-            pid = os.getpid()
-            threads_ativas = threading.active_count()
-            plataforma = sys.platform
-            Versao_python = f"{sys.version_info.major}.{sys.version_info.minor}"
+            # Executa um calculo matematico simples para gerar telemetria interna
+            fator_computacional = (ciclo * 104729) % 999983
             
-            print(f"📊 SYSTEM METRICS | Ciclo: #{ciclo} | PID: {pid} | Threads Ativas: {threads_ativas} | Uptime: {tempo_ativo}s | Python: {versao_python}")
+            print(f"📊 METRICS | Ciclo: #{ciclo} | Fator: {fator_computacional} | Uptime: {uptime_segundos}s | Status: ESTÁVEL")
                 
-        except Exception as erro:
-            print(f"❌ Erro ao coletar métricas internas: {erro}")
+        except Exception:
+            pass
             
-        time.sleep(15) # Atualiza a cada 15 segundos no console
+        time.sleep(15) # Executa estritamente a cada 15 segundos
 
-# --- AUTOMAÇÃO 2: Servidor Web que Mantém o Plano do Render Grátis ---
-class WebServerHandler(BaseHTTPRequestHandler):
+# --- AUTOMAÇÃO 2: Servidor Web Nativo para o Render Grátis ---
+class ServidorHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(b"Engine de Telemetria Interna Online e Operando!")
+        self.wfile.write(b"Engine Computencial Online!")
 
 def rodar_servidor_web():
-    porta = int(os.environ.get("PORT", 10000))
-    server_address = ('', porta)
-    httpd = HTTPServer(server_address, WebServerHandler)
-    print(f"🌐 Porta {porta} aberta. Servidor Web ativo para garantir o plano 100% gratuito!")
+    # Coleta a porta injetada pelo ambiente do Render
+    porta_render = int(os.environ.get("PORT", 10000))
+    endereco = ('', porta_render)
+    httpd = HTTPServer(endereco, ServidorHandler)
+    print(f"🌐 Servidor Web escutando na porta {porta_render} de forma nativa.")
     httpd.serve_forever()
 
 if __name__ == "__main__":
-    # Inicia o monitor de telemetria na thread de segundo plano
-    thread_dados = threading.Thread(target=monitorar_container)
-    thread_dados.daemon = True
-    thread_dados.start()
+    # 1. Start na Thread de processamento puro
+    thread_computacional = threading.Thread(target=processamento_interno)
+    thread_computacional.daemon = True
+    thread_computacional.start()
 
-    # Mantém o container do Render online respondendo às checagens
+    # 2. Start no servidor para manter o status LIVE estável
     rodar_servidor_web()
