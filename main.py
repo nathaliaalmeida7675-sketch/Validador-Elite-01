@@ -5,27 +5,37 @@ import threading
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-# --- AUTOMAÇÃO 1: Monitor de Cripto Sem Bloqueio de IP ---
+# --- AUTOMAÇÃO 1: Monitor de Câmbio e Cripto Livre de Bloqueios ---
 def escutar_dados_globais():
-    # Rota pública alternativa da CoinGecko
-    url = "https://coingecko.com"
-    print("🔌 Scanner de Ativos ativado. Monitorando preços globais...")
+    # API pública da AwesomeAPI - Feita para desenvolvedores, livre de Cloudflare agressivo
+    url = "https://awesomeapi.com.br"
+    print("🔌 Scanner de Ativos ativado. Monitorando câmbio e cripto em tempo real...")
     
     while True:
         try:
-            # Usando uma string simples de User-Agent padrão
             req = urllib.request.Request(
                 url, 
-                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+                headers={'User-Agent': 'Mozilla/5.0'}
             )
             with urllib.request.urlopen(req) as resposta:
-                dados = json.loads(resposta.read().decode())
-                btc = dados.get('bitcoin', {}).get('usd')
-                eth = dados.get('ethereum', {}).get('usd')
-                print(f"📊 DADOS EM TEMPO REAL | BTC: ${btc} | ETH: ${eth}")
+                corpo = resposta.read().decode('utf-8')
+                dados = json.loads(corpo)
+                
+                # Extração dos dados brutos do JSON
+                dolar = dados.get('USDBRL', {}).get('bid')
+                euro = dados.get('EURBRL', {}).get('bid')
+                btc_brl = dados.get('BTCBRL', {}).get('bid')
+                
+                # Converte o preço do BTC para float e formata com separador
+                if btc_brl:
+                    btc_formatado = f"{float(btc_brl):,.2f}".replace(",", ".")
+                else:
+                    btc_formatado = "N/A"
+
+                print(f"📊 MERCADO ATUALIZADO | Dólar: R$ {dolar} | Euro: R$ {euro} | Bitcoin: R$ {btc_formatado}")
                 
         except Exception as erro:
-            print(f"❌ Erro na coleta: {erro}")
+            print(f"❌ Erro na coleta de dados: {erro}")
             
         time.sleep(30) # Intervalo seguro de 30 segundos
 
@@ -50,3 +60,4 @@ if __name__ == "__main__":
     thread_dados.start()
 
     rodar_servidor_web()
+
