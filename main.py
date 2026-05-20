@@ -1,43 +1,33 @@
-import urllib.request
-import json
 import time
 import threading
 import os
+import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-# --- AUTOMAÇÃO 1: Monitor de Câmbio e Cripto Livre de Bloqueios ---
-def escutar_dados_globais():
-    # API pública da AwesomeAPI - Feita para desenvolvedores, livre de Cloudflare agressivo
-    url = "https://awesomeapi.com.br"
-    print("🔌 Scanner de Ativos ativado. Monitorando câmbio e cripto em tempo real...")
+# --- AUTOMAÇÃO 1: Monitor Interno de Infraestrutura e Performance ---
+def monitorar_container():
+    print("🔌 Scanner de Infraestrutura Ativado. Monitorando performance do container...")
+    
+    inicio_servico = time.time()
+    ciclo = 0
     
     while True:
         try:
-            req = urllib.request.Request(
-                url, 
-                headers={'User-Agent': 'Mozilla/5.0'}
-            )
-            with urllib.request.urlopen(req) as resposta:
-                corpo = resposta.read().decode('utf-8')
-                dados = json.loads(corpo)
-                
-                # Extração dos dados brutos do JSON
-                dolar = dados.get('USDBRL', {}).get('bid')
-                euro = dados.get('EURBRL', {}).get('bid')
-                btc_brl = dados.get('BTCBRL', {}).get('bid')
-                
-                # Converte o preço do BTC para float e formata com separador
-                if btc_brl:
-                    btc_formatado = f"{float(btc_brl):,.2f}".replace(",", ".")
-                else:
-                    btc_formatado = "N/A"
-
-                print(f"📊 MERCADO ATUALIZADO | Dólar: R$ {dolar} | Euro: R$ {euro} | Bitcoin: R$ {btc_formatado}")
+            ciclo += 1
+            tempo_ativo = int(time.time() - inicio_servico)
+            
+            # Captura dados nativos do processo e do sistema operacional Linux do Render
+            pid = os.getpid()
+            threads_ativas = threading.active_count()
+            plataforma = sys.platform
+            Versao_python = f"{sys.version_info.major}.{sys.version_info.minor}"
+            
+            print(f"📊 SYSTEM METRICS | Ciclo: #{ciclo} | PID: {pid} | Threads Ativas: {threads_ativas} | Uptime: {tempo_ativo}s | Python: {versao_python}")
                 
         except Exception as erro:
-            print(f"❌ Erro na coleta de dados: {erro}")
+            print(f"❌ Erro ao coletar métricas internas: {erro}")
             
-        time.sleep(30) # Intervalo seguro de 30 segundos
+        time.sleep(15) # Atualiza a cada 15 segundos no console
 
 # --- AUTOMAÇÃO 2: Servidor Web que Mantém o Plano do Render Grátis ---
 class WebServerHandler(BaseHTTPRequestHandler):
@@ -45,7 +35,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(b"Engine de Dados Online e Operando com Sucesso!")
+        self.wfile.write(b"Engine de Telemetria Interna Online e Operando!")
 
 def rodar_servidor_web():
     porta = int(os.environ.get("PORT", 10000))
@@ -55,9 +45,10 @@ def rodar_servidor_web():
     httpd.serve_forever()
 
 if __name__ == "__main__":
-    thread_dados = threading.Thread(target=escutar_dados_globais)
+    # Inicia o monitor de telemetria na thread de segundo plano
+    thread_dados = threading.Thread(target=monitorar_container)
     thread_dados.daemon = True
     thread_dados.start()
 
+    # Mantém o container do Render online respondendo às checagens
     rodar_servidor_web()
-
